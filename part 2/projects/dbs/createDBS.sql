@@ -1,0 +1,4 @@
+CREATE DATABASE sandwichdb;
+CREATE DATABASE userdb;
+CREATE DATABASE promotiondb;
+CREATE DATABASE shopdb;

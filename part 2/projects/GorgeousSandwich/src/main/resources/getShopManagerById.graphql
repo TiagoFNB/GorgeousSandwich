@@ -1,0 +1,7 @@
+query getShopManagerById($id: String!){
+    getShopManagerById(id: $id) {
+        id{id},
+        email{email},
+        userName{userName}
+    }
+}

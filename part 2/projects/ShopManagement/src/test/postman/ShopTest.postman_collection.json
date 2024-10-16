@@ -1,0 +1,429 @@
+{
+	"info": {
+		"_postman_id": "3a1d6d7b-2e77-4b66-9880-044029076179",
+		"name": "ShopTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17773797"
+	},
+	"item": [
+		{
+			"name": "Shop",
+			"item": [
+				{
+					"name": "Setup",
+					"item": [
+						{
+							"name": "Create Sandwich",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Setup Sandwich for Shop\", function () {\r",
+											"\r",
+											" pm.response.to.have.status(200);\r",
+											" pm.response.to.not.be.error;\r",
+											" pm.response.to.be.withBody;\r",
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											" pm.collectionVariables.set(\"idSandwich\", jsonData.data.create.id.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\r\n    create(sandwichDTO : {sandwichDesignation: \"TestForShop\", sellingPrice: 10.5, descriptionList: [\"Ham and Cheese\", \"Fiambre e queijo\"]}) {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9000/sandwich",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9000",
+									"path": [
+										"sandwich"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create ShopManager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Setup ShopManager for Shop\", function () {\r",
+											"\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.not.be.error;\r",
+											"    pm.response.to.be.withBody;\r",
+											"\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    pm.collectionVariables.set(\"idShopManager\", jsonData.data.createShopManager.id.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation{\r\n    createShopManager(shopManager:{ email:\"{{$randomEmail}}\", userName: \"usernameTestShop\", password: \"testpwd\", }){\r\n        id{id}\r\n        userName{userName},\r\n        email{email},\r\n    }\r\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9000/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9000",
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Count Shop",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Shops 01 - Obter quantidade antes criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.data.getList.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {     \r\n    getList {         \r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									" pm.expect(jsonData.data.create.designation.designation).to.eql(\"Desi\");\r",
+									" pm.expect(jsonData.data.create.shopProperties.maximumNumberDeliveries.maximumNumberDeliveries).to.eql(\"10\");\r",
+									" pm.expect(jsonData.data.create.shopProperties.minimumAcceptableAdvance.minimumAcceptableAdvance).to.eql(\"10\");\r",
+									" pm.expect(jsonData.data.create.shopProperties.period.period).to.eql(\"15\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($sandId: String, $idShopMan: String) {\r\n    create(shopDTO : {shopDesignation: \"Desi\", shopAddress: \"{{$randomStreetAddress}}\", dailySchedule: [{openingHours: \"10:00\", closingHours: \"11:00\", day: \"MONDAY\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"tuesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"wednesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"thursday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"friday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"saturday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"sunday\"}], sandwichIdList: [$sandId], shopManagerId: $idShopMan, shopProperties: {maximumNumberDeliveries: \"10\", minimumAcceptableAdvance: \"10\", period: \"15\"}}){\r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": "{\r\n    \"idShopMan\": \"{{idShopManager}}\",\r\n    \"sandId\": \"{{idSandwich}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 02 - MaximumNumberDeliveries Negativo\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.data.create).to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($sandId: String, $idShopMan: String) {\r\n    create(shopDTO : {shopDesignation: \"Desi\", shopAddress: \"{{$randomStreetAddress}}\", dailySchedule: [{openingHours: \"10:00\", closingHours: \"11:00\", day: \"MONDAY\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"tuesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"wednesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"thursday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"friday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"saturday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"sunday\"}], sandwichIdList: [$sandId], shopManagerId: $idShopMan, shopProperties: {maximumNumberDeliveries: \"-10\", minimumAcceptableAdvance: \"10\", period: \"15\"}}){\r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": "{\r\n    \"idShopMan\": \"{{idShopManager}}\",\r\n    \"sandId\": \"{{idSandwich}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 03 - MinimumAcceptableAdvance Negativo\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.data.create).to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($sandId: String, $idShopMan: String) {\r\n    create(shopDTO : {shopDesignation: \"Desi\", shopAddress: \"{{$randomStreetAddress}}\", dailySchedule: [{openingHours: \"10:00\", closingHours: \"11:00\", day: \"MONDAY\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"tuesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"wednesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"thursday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"friday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"saturday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"sunday\"}], sandwichIdList: [$sandId], shopManagerId: $idShopMan, shopProperties: {maximumNumberDeliveries: \"10\", minimumAcceptableAdvance: \"-10\", period: \"15\"}}){\r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": "{\r\n    \"idShopMan\": \"{{idShopManager}}\",\r\n    \"sandId\": \"{{idSandwich}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 01 - Period Negativo\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.data.create).to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($sandId: String, $idShopMan: String) {\r\n    create(shopDTO : {shopDesignation: \"Desi\", shopAddress: \"{{$randomStreetAddress}}\", dailySchedule: [{openingHours: \"10:00\", closingHours: \"11:00\", day: \"MONDAY\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"tuesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"wednesday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"thursday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"friday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"saturday\"}, {openingHours: \"10:00\", closingHours: \"11:00\", day: \"sunday\"}], sandwichIdList: [$sandId], shopManagerId: $idShopMan, shopProperties: {maximumNumberDeliveries: \"10\", minimumAcceptableAdvance: \"10\", period: \"-15\"}}){\r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": "{\r\n    \"idShopMan\": \"{{idShopManager}}\",\r\n    \"sandId\": \"{{idSandwich}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Shop 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Shop 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.data.getList.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {     \r\n    getList {         \r\n        id {id}         \r\n        designation {designation}         \r\n        address {address}         \r\n        dailySchedules {openingHours {openingHours}, closingHours {closingHours}, day}\r\n        shopManagerId {shopManagerId}\r\n        sandwichList {sandwichId}\r\n        shopProperties {maximumNumberDeliveries {maximumNumberDeliveries}, minimumAcceptableAdvance {minimumAcceptableAdvance}, period {period}}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "idSandwich",
+			"value": ""
+		},
+		{
+			"key": "idShopManager",
+			"value": ""
+		},
+		{
+			"key": "countTeste",
+			"value": ""
+		}
+	]
+}

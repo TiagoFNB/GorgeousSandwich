@@ -1,0 +1,9 @@
+query getSandwichById($id: String!){
+    getSandwichById(id: $id) {
+        id {id}
+        designation {designation}
+        price {price}
+        descriptionList {description, language { language }}
+    }
+}
+

@@ -1,0 +1,73 @@
+type Query {
+    getCustomers: [Customer]!
+    getShopManagers: [ShopManager]!
+    getCustomerById(id: String): Customer
+    getShopManagerById(id: String): ShopManager
+}
+
+type Mutation {
+    createCustomer(customer : CustomerDTO) : Customer
+    createAdmin(admin : AdminDTO) : Admin
+    createShopManager(shopManager : ShopManagerDTO) : ShopManager
+
+}
+
+input CustomerDTO {
+    email: String
+    userName: String
+    password: String
+    address: String
+    tin: String
+}
+input AdminDTO {
+    email: String
+    userName: String
+    password: String
+}
+input ShopManagerDTO {
+    email: String
+    userName: String
+    password: String
+}
+type Admin {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type ShopManager {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type Customer {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+    address: CustomerAddress
+    tin: CustomerTIN
+}
+
+type UserInternalId {
+    id: ID
+}
+
+type UserName {
+    userName: String
+}
+
+type UserEmail {
+    email: String
+}
+
+type UserPassword {
+    pwd: String
+}
+
+type CustomerAddress {
+    address: String
+}
+
+type CustomerTIN {
+    tin: String
+}
+

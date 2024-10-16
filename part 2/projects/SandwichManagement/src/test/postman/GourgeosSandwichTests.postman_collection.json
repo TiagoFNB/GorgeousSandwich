@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "7e98fed5-d142-481d-beb9-1bcbfac4d5d4",
+		"name": "GourgeosSandwichTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sandwich",
+			"item": [
+				{
+					"name": "Count Sandwichs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Sandwiches 01 - Obter quantidade antes de criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.data.getList.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n    getList {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.data.create.id.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.data.create.designation.designation).to.eql(\"BigGorgeous\");\r",
+									" pm.expect(jsonData.data.create.price.price).to.eql(10.5);\r",
+									" pm.expect(jsonData.data.create.descriptionList.length).to.eql(2);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    create(sandwichDTO : {sandwichDesignation: \"BigGorgeous\", sellingPrice: 10.5, descriptionList: [\"Ham and Cheese\", \"Fiambre e queijo\"]}) {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 02 - Error, no designation\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.data.create).to.be.null;\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    create(sandwichDTO : {sandwichDesignation: \"\", sellingPrice: 10.5, descriptionList: [\"Ham and Cheese\", \"Fiambre e queijo\"]}) {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 03 - Error, language no accepted\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.errors[0].message).to.eql(\"Invalid language. JA\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    create(sandwichDTO : {sandwichDesignation: \"BigGorgeous\", sellingPrice: 10.5, descriptionList: [\"ハム\"]}) {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Sandwichs 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Sandwiches 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.data.getList.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n    getList {\r\n        id {id}\r\n        designation {designation}\r\n        price {price}\r\n        descriptionList {description, language { language }}\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "loginToken",
+			"value": ""
+		},
+		{
+			"key": "countTeste",
+			"value": ""
+		}
+	]
+}

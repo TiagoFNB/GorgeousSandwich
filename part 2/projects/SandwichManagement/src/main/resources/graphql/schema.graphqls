@@ -1,0 +1,42 @@
+type Query {
+    getList: [Sandwich]
+    getSandwichById(id : String): Sandwich
+}
+
+type Mutation {
+    create(sandwichDTO : SandwichDTO) : Sandwich
+}
+
+input SandwichDTO {
+    sandwichDesignation: String
+    sellingPrice: Float
+    descriptionList: [String]
+}
+
+type Sandwich {
+    id: SandwichInternalId
+    designation: SandwichDesignation
+    price: SellingPrice
+    descriptionList: [Description]
+}
+
+type SandwichInternalId {
+    id: ID
+}
+
+type SandwichDesignation {
+    designation: String
+}
+
+type SellingPrice {
+    price: Float
+}
+
+type Description {
+    description: String
+    language: Language
+}
+
+type Language {
+    language: String
+}

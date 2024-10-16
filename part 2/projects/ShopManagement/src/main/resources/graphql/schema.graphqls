@@ -1,0 +1,175 @@
+type Query {
+    getList: [Shop]
+    getShopById(id : String): Shop
+    getSandwichById(id : String): Sandwich
+    getShopManagerById(id: String): ShopManager
+}
+
+type Mutation {
+    create(shopDTO : ShopDTO) : Shop
+    changeShopProperties(shopDTO : ShopDTO) : Shop
+}
+
+input ShopDTO {
+    shopDesignation: String
+    shopAddress: String
+    dailySchedule: [DailyScheduleDTO]
+    sandwichIdList: [String]
+    shopManagerId: String
+    shopProperties: ShopPropertiesDTO
+}
+
+input DailyScheduleDTO {
+    openingHours: String
+    closingHours: String
+    day: String
+}
+
+input ShopPropertiesDTO {
+    maximumNumberDeliveries: String
+    minimumAcceptableAdvance: String
+    period: String
+}
+
+type Shop {
+    id: ShopInternalId
+    designation: ShopDesignation
+    address: ShopAddress
+    dailySchedules: [DailySchedule]
+    shopManagerId: UserInternalIdShop
+    sandwichList: [SandwichInternalIdShop]
+    shopProperties: ShopProperties
+}
+
+type UserInternalIdShop {
+    shopManagerId: String
+}
+
+type SandwichInternalIdShop {
+    sandwichId: String
+}
+
+type ShopInternalId {
+    id: ID
+}
+
+type ShopDesignation {
+    designation: String
+}
+
+type ShopAddress {
+    address: String
+}
+
+type DailySchedule {
+    openingHours: OpeningHours
+    closingHours: ClosingHours
+    day: Day
+}
+
+type OpeningHours {
+    openingHours: String
+}
+
+type ClosingHours {
+    closingHours: String
+}
+
+enum Day {
+    Monday
+    Tuesday
+    Wednesday
+    Thursday
+    Friday
+    Saturday
+    Sunday
+}
+
+type ShopProperties {
+    maximumNumberDeliveries: MaximumNumberDeliveries
+    minimumAcceptableAdvance: MinimumAcceptableAdvance
+    period: Period
+}
+
+type MaximumNumberDeliveries {
+    maximumNumberDeliveries: String
+}
+
+type MinimumAcceptableAdvance {
+    minimumAcceptableAdvance: String
+}
+
+type Period {
+    period: String
+}
+
+type Sandwich {
+    id: SandwichInternalId
+    designation: SandwichDesignation
+    price: SellingPrice
+    descriptionList: [Description]
+}
+
+type SandwichInternalId {
+    id: ID
+}
+
+type SandwichDesignation {
+    designation: String
+}
+
+type SellingPrice {
+    price: Float
+}
+
+type Description {
+    description: String
+    language: Language
+}
+
+type Language {
+    language: String
+}
+
+type Admin {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type ShopManager {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type Customer {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+    address: CustomerAddress
+    tin: CustomerTIN
+}
+
+type UserInternalId {
+    id: ID
+}
+
+type UserName {
+    userName: String
+}
+
+type UserEmail {
+    email: String
+}
+
+type UserPassword {
+    pwd: String
+}
+
+type CustomerAddress {
+    address: String
+}
+
+type CustomerTIN {
+    tin: String
+}
+

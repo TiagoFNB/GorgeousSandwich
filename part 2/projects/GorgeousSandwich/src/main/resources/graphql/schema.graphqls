@@ -1,0 +1,109 @@
+type Query {
+    getList: [Sandwich]
+    getSandwichById(id : String): Sandwich
+    getCustomers: [Customer]!
+    getShopManagers: [ShopManager]!
+    getCustomerById(id: String): Customer
+    getShopManagerById(id: String): ShopManager
+}
+
+type Mutation {
+    create(sandwichDTO : SandwichDTO) : Sandwich
+    createCustomer(customer : CustomerDTO) : Customer
+    createAdmin(admin : AdminDTO) : Admin
+    createShopManager(shopManager : ShopManagerDTO) : ShopManager
+}
+
+input SandwichDTO {
+    sandwichDesignation: String
+    sellingPrice: Float
+    descriptionList: [String]
+}
+
+type Sandwich {
+    id: SandwichInternalId
+    designation: SandwichDesignation
+    price: SellingPrice
+    descriptionList: [Description]
+}
+
+type SandwichInternalId {
+    id: ID
+}
+
+type SandwichDesignation {
+    designation: String
+}
+
+type SellingPrice {
+    price: Float
+}
+
+type Description {
+    description: String
+    language: Language
+}
+
+type Language {
+    language: String
+}
+
+input CustomerDTO {
+    email: String
+    userName: String
+    password: String
+    address: String
+    tin: String
+}
+input AdminDTO {
+    email: String
+    userName: String
+    password: String
+}
+input ShopManagerDTO {
+    email: String
+    userName: String
+    password: String
+}
+type Admin {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type ShopManager {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+}
+type Customer {
+    id: UserInternalId
+    userName: UserName
+    email: UserEmail
+    address: CustomerAddress
+    tin: CustomerTIN
+}
+
+type UserInternalId {
+    id: ID
+}
+
+type UserName {
+    userName: String
+}
+
+type UserEmail {
+    email: String
+}
+
+type UserPassword {
+    pwd: String
+}
+
+type CustomerAddress {
+    address: String
+}
+
+type CustomerTIN {
+    tin: String
+}
+

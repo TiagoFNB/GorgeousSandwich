@@ -1,0 +1,125 @@
+networks:
+  gorgeous:
+    name: gorgeous
+    driver: bridge
+services:
+  dbs:
+    container_name: dbs
+    hostname: dbs
+    build: ./dbs
+    ports:
+      - "5432:5432"
+    networks:
+      gorgeous:
+        aliases:
+          - dbs
+  mssql:
+    container_name: mssql
+    hostname: mssql
+    build: ./mssql
+    ports:
+      - "1433:1433"
+    networks:
+      gorgeous:
+        aliases:
+          - mssql
+  eureka:
+    container_name: eureka
+    hostname: eureka
+    build: ./eureka
+    ports:
+      - "8083:8083"
+    networks:
+      gorgeous:
+        aliases:
+          - eureka
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+  gateway:
+    container_name: gateway
+    build: ./gateway
+    ports:
+      - "9000:9000"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+    links:
+      - eureka
+  sandwichmanagement:
+    container_name: sandwichmanagement
+    build: ./sandwichmanagement
+    ports:
+      - "9003:9003"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+      - dbs
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbs:5432/sandwichdb
+      - eureka.instance.hostname=sandwichmanagement
+  ordermanagement:
+    container_name: ordermanagement
+    build: ./ordermanagement/ordermanagement
+    ports:
+      - "44343:44343"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+      - mssql
+    environment:
+      - eureka:client:serviceUrl=http://eureka:8083/eureka/
+      - eureka:instance:hostname=ordermanagement
+      - ConnectionStrings:DefaultConnection=Server=mssql,1433;Initial Catalog=Orders;User Id=sa;Password=ThisBe1Password
+  usermanagement:
+    container_name: usermanagement
+    build: ./usermanagement
+    ports:
+      - "9002:9002"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+      - dbs
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbs:5432/userdb
+      - eureka.instance.hostname=usermanagement
+  promotionmanagement:
+    container_name: promotionmanagement
+    build: ./promotionmanagement
+    ports:
+      - "9006:9006"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+      - dbs
+      - sandwichmanagement
+      - gateway
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbs:5432/promotiondb
+      - eureka.instance.hostname=promotionmanagement
+  shopmanagement:
+    container_name: shopmanagement
+    build: ./shopmanagement
+    ports:
+      - "9004:9004"
+    networks:
+      - gorgeous
+    depends_on:
+      - eureka
+      - dbs
+      - sandwichmanagement
+      - usermanagement
+      - gateway
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka:8083/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbs:5432/shopdb
+      - eureka.instance.hostname=shopmanagement

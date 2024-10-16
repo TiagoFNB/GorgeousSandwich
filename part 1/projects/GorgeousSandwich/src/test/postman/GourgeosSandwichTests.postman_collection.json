@@ -1,0 +1,1484 @@
+{
+	"info": {
+		"_postman_id": "5b6d5882-2848-4cf7-9de7-5bc40377ec53",
+		"name": "GourgeosSandwichTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sandwich",
+			"item": [
+				{
+					"name": "Count Sandwichs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Sandwiches 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" var reqBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.designation).to.eql(reqBody.sandwichDesignation);\r",
+									" pm.expect(jsonData.price).to.eql(reqBody.sellingPrice);\r",
+									" pm.expect(jsonData.descriptionList.length).to.eql(reqBody.descriptionList.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sandwichDesignation\": \"BigGorgeous\",\r\n    \"sellingPrice\": 10.5,\r\n    \"descriptionList\": [\r\n        \"Ham and Cheese\",\r\n        \"Fiambre e Queijo\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 02 - Error, no designation\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.id).to.be.undefined;\r",
+									" pm.expect(jsonData.designation).to.be.undefined;\r",
+									" pm.expect(jsonData.price).to.be.undefined;\r",
+									" pm.expect(jsonData.descriptionList).to.be.undefined;\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sandwichDesignation\": \"\",\r\n    \"sellingPrice\": 10.5,\r\n    \"descriptionList\": [\r\n        \"Ham and Cheese\",\r\n        \"Fiambre e Queijo\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sandwich 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Sandwich 01 - Error, language no accepted\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.error).to.eql(\"Invalid language. JA\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sandwichDesignation\": \"Chick Fil Gorgeous\",\r\n    \"sellingPrice\": 10.5,\r\n    \"descriptionList\": [\r\n        \"ハム\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Sandwichs 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Sandwiches 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sandwich",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sandwich"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Count Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Customers 01 - Obter quantidade antes criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Customer 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" var reqBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.role).to.eql(\"CUSTOMER\");\r",
+									" pm.expect(jsonData.userName).to.eql(reqBody.userName);\r",
+									" pm.expect(jsonData.address).to.eql(reqBody.address);\r",
+									" pm.expect(jsonData.email).to.eql(reqBody.email);\r",
+									" pm.expect(jsonData.tin).to.eql(reqBody.tin.toString());\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\",\r\n    \"address\":\"adds\",\r\n    \"tin\":{{$randomInt}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Customer 02 - Error, no email\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									" pm.expect(jsonData.id).to.be.undefined;\r",
+									" pm.expect(jsonData.role).to.be.undefined;\r",
+									" pm.expect(jsonData.userName).to.be.undefined;\r",
+									" pm.expect(jsonData.address).to.be.undefined;\r",
+									" pm.expect(jsonData.email).to.be.undefined;\r",
+									" pm.expect(jsonData.tin).to.be.undefined;\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"\",\r\n    \"password\":\"1234\",\r\n    \"address\":\"adds\",\r\n    \"tin\":{{$randomInt}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Customer 03 - Error email invalid\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.error).to.eql(\"customer2email.com is not a valid e-mail (does not match pattern)\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"customer2email.com\",\r\n    \"password\":\"1234\",\r\n    \"address\":\"adds\",\r\n    \"tin\":{{$randomInt}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Customer 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ShopManager",
+			"item": [
+				{
+					"name": "Count ShopManager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista ShopManagers 01 - Obter quantidade antes criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/shopmanager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopmanager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ShopManager 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create ShopManager 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" var reqBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.role).to.eql(\"SHOPMANAGER\");\r",
+									" pm.expect(jsonData.userName).to.eql(reqBody.userName);\r",
+									" pm.expect(jsonData.address).to.eql(reqBody.address);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shopmanager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopmanager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ShopManager 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create ShopManager 02 - Error, no email\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									" pm.expect(jsonData.id).to.be.undefined;\r",
+									" pm.expect(jsonData.role).to.be.undefined;\r",
+									" pm.expect(jsonData.userName).to.be.undefined;\r",
+									" pm.expect(jsonData.email).to.be.undefined;\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shopmanager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopmanager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ShopManager 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create ShopManager 03 - Error email invalid\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.error).to.eql(\"customer2email.com is not a valid e-mail (does not match pattern)\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"teste2\",\r\n    \"email\":\"customer2email.com\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shopmanager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopmanager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count ShopManager 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista ShopManager 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/shopmanager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopmanager"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Promotion",
+			"item": [
+				{
+					"name": "Setup",
+					"item": [
+						{
+							"name": "Create Sandwich",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Setup Sandwich for Shop\", function () {\r",
+											"\r",
+											" pm.response.to.have.status(200);\r",
+											" pm.response.to.not.be.error;\r",
+											" pm.response.to.be.withBody;\r",
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											" pm.collectionVariables.set(\"idSandwich\", jsonData.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sandwichDesignation\": \"BigGorgeous\",\r\n    \"sellingPrice\": 10.5,\r\n    \"descriptionList\": [\r\n        \"Ham and Cheese\",\r\n        \"Fiambre e Queijo\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/sandwich",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"sandwich"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Count Promotion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Promotions 01 - Obter quantidade\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/promotion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"promotion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Promotion 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Promotion 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" var reqBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.percentage).to.eql(reqBody.promotionPercentage);\r",
+									" pm.expect(jsonData.promotionPeriodBeginning).to.eql(reqBody.promotionPeriod.promotionPeriodBeginning);\r",
+									" pm.expect(jsonData.promotionPeriodEnd).to.eql(reqBody.promotionPeriod.promotionPeriodEnd);\r",
+									" pm.expect(jsonData.type).to.eql(reqBody.promotionType);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"promotionPercentage\": 30.0,\r\n    \"promotionPeriod\": {\r\n        \"promotionPeriodBeginning\": \"29-07-2022\",\r\n        \"promotionPeriodEnd\": \"22-12-2023\"\r\n    },\r\n    \"promotionType\": \"LOCAL\",\r\n    \"sandwichId\": \"{{idSandwich}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/promotion/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"promotion",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Promotion 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Promotion 01 - Error, no percentage\", function () {\r",
+									"\r",
+									"    \r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.id).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPercentage).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPeriodBeginning).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPeriodEnd).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionType).to.be.undefined;\r",
+									" \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"promotionPercentage\": 200,\r\n    \"promotionPeriod\": {\r\n        \"promotionPeriodBeginning\": \"29-07-2022\",\r\n        \"promotionPeriodEnd\": \"22-12-2023\"\r\n    },\r\n    \"promotionType\": \"LOCAL\",\r\n    \"sandwichId\": \"{{idSandwich}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/promotion/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"promotion",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Promotion 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Promotion 01 - Error, invalid Date\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.id).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPercentage).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPeriodBeginning).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionPeriodEnd).to.be.undefined;\r",
+									" pm.expect(jsonData.promotionType).to.be.undefined;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"promotionPercentage\": 30.0,\r\n    \"promotionPeriod\": {\r\n        \"promotionPeriodBeginning\": \"29-07-2022\",\r\n        \"promotionPeriodEnd\": \"30-02-2023\"\r\n    },\r\n    \"promotionType\": \"LOCAL\",\r\n    \"sandwichId\": \"{{idSandwich}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/promotion/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"promotion",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Promotion 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Promotions 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/promotion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"promotion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Shop",
+			"item": [
+				{
+					"name": "Setup",
+					"item": [
+						{
+							"name": "Create Sandwich",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Setup Sandwich for Shop\", function () {\r",
+											"\r",
+											" pm.response.to.have.status(200);\r",
+											" pm.response.to.not.be.error;\r",
+											" pm.response.to.be.withBody;\r",
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											" pm.collectionVariables.set(\"idSandwich\", jsonData.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sandwichDesignation\": \"BigGorgeous\",\r\n    \"sellingPrice\": 10.5,\r\n    \"descriptionList\": [\r\n        \"Ham and Cheese\",\r\n        \"Fiambre e Queijo\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/sandwich",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"sandwich"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create ShopManager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Setup ShopManager for Shop\", function () {\r",
+											"\r",
+											"  pm.collectionVariables.set(\"emailShopManager\", \"shopTest@gmail.com\");\r",
+											" \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userName\":\"shopTest\",\r\n    \"email\":\"shopTest@gmail.com\",\r\n    \"password\":\"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/shopmanager",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"shopmanager"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Count Shop",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Shops 01 - Obter quantidade antes criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" pm.collectionVariables.set(\"countTeste\", jsonData.length);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 01 - Dados normais\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" var reqBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.designation).to.eql(reqBody.shopDesignation);\r",
+									" pm.expect(jsonData.address).to.eql(reqBody.shopAddress);\r",
+									" pm.expect(jsonData.dailySchedules).to.not.be.undefined;\r",
+									" pm.expect(jsonData.id).to.not.be.undefined;\r",
+									" pm.expect(jsonData.email).to.eql(reqBody.shopManagerEmail);\r",
+									" pm.expect(jsonData.userName).to.not.be.undefined;\r",
+									" pm.expect(jsonData.role).to.not.be.undefined;\r",
+									" pm.expect(jsonData.sandwichList).to.not.be.undefined;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shopDesignation\": \"shopDesignation\",\r\n    \"shopAddress\": \"{{$randomStreetAddress}}\",\r\n    \"dailySchedule\": [ {\r\n        \"openingHours\": \"08:00\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"monday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"tuesday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"wednesday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"thursday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"friday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"saturday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"sunday\"\r\n    }\r\n    ],\r\n    \"sandwichIdList\": [\"{{idSandwich}}\"],\r\n    \"shopManagerEmail\": \"{{emailShopManager}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Shop 02 - Error, missing 1 dailySchedule\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.error).to.eql(\"Must have 7 daily Schedules\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shopDesignation\": \"shopDesignation\",\r\n    \"shopAddress\": \"{{$randomStreetAddress}}\",\r\n    \"dailySchedule\": [ {\r\n        \"openingHours\": \"08:00\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"monday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"tuesday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"wednesday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"thursday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"friday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"saturday\"\r\n    }\r\n    ],\r\n    \"sandwichIdList\": [\"{{idSandwich}}\"],\r\n    \"shopManagerEmail\": \"{{emailShopManager}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Shop 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create Customer 03 - Error, dailySchedule with same day\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(500);\r",
+									" pm.response.to.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData.error).to.eql(\"Must have 7 daily Schedules, with all 7 different days\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shopDesignation\": \"shopDesignation\",\r\n    \"shopAddress\": \"{{$randomStreetAddress}}\",\r\n    \"dailySchedule\": [ {\r\n        \"openingHours\": \"08:00\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"monday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"monday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"wednesday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"thursday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"friday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"saturday\"\r\n    },\r\n    {\r\n        \"openingHours\": \"08:30\",\r\n        \"closingHours\": \"20:00\",\r\n        \"day\": \"sunday\"\r\n    }\r\n    ],\r\n    \"sandwichIdList\": [\"{{idSandwich}}\"],\r\n    \"shopManagerEmail\": \"{{emailShopManager}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count Shop 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Lista Shop 02 - Obter quantidade apos criar\", function () {\r",
+									"\r",
+									" pm.response.to.have.status(200);\r",
+									" pm.response.to.not.be.error;\r",
+									" pm.response.to.be.withBody;\r",
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									" pm.expect(jsonData).to.not.be.undefined;\r",
+									"\r",
+									" var count = pm.collectionVariables.get(\"countTeste\");\r",
+									" pm.expect(jsonData.length).to.eql(count+1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/shop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shop"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest({",
+					"    url: 'http://localhost:8080/login',",
+					"    method: 'POST',",
+					"    body: {",
+					"        mode: 'raw',",
+					"        raw: JSON.stringify({",
+					"            \"username\": \"testeControl@email.com\",",
+					"            \"password\":\"123\"",
+					"        })",
+					"    },",
+					"    header: {",
+					"        'Content-Type': 'application/json',",
+					"    }",
+					"}, function (err, res) {",
+					"    pm.collectionVariables.set(\"loginToken\", res.json().token);",
+					"    pm.request.headers.add({key: 'Authorization', value: \"Bearer \" + res.json().token});",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "loginToken",
+			"value": ""
+		},
+		{
+			"key": "countTeste",
+			"value": ""
+		},
+		{
+			"key": "idSandwich",
+			"value": ""
+		},
+		{
+			"key": "emailShopManager",
+			"value": ""
+		}
+	]
+}
