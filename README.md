@@ -2,7 +2,9 @@
 Project for ARQSOFT subject of the MSc in Software Engineering course at ISEP.
 
 For academic purposes, the project consisted in two parts.
+
 Part 1- Implement as monolith Springboot solution.
+
 Part 2- Migrate the monolith solution to a microservices based one, that use Java (Springboot) and C# (.NET) for the microservices.
 
 Each part documentation is avalaible in their respective folders.
